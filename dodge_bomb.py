@@ -31,7 +31,7 @@ def Game_Over():
     owari.set_alpha
     fonto = pg.font.Font(None,80)
     txt = fonto.render("Game Over",True,(255,255,255))
-    return owari,txt
+    return owari,txt #画面の暗転とGameOverを戻す
 
 
 def check(any_rct:pg.Rect):
