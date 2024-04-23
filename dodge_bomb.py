@@ -14,15 +14,15 @@ DELTA = {#こうかトン移動用辞書
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
-def check(any_rct):
+def check(any_rct:pg.Rect):
     """
     動く物体の画面外判定
     横，縦
     """
     yoko, tate=True, True
-    if any_rct.left <= 0 or WIDTH <= any_rct.right:
+    if any_rct.left < 0 or WIDTH < any_rct.right:
         yoko=False
-    if any_rct.up <= 0 or HEIGHT <= any_rct.dottom:
+    if any_rct.top < 0 or HEIGHT < any_rct.bottom:
         tate=False
     return yoko,tate
 
@@ -39,8 +39,8 @@ def main():
     bomb_img = pg.Surface((20,20))
     pg.draw.circle(bomb_img, (255, 0, 0), (10, 10), 10)
     bomb_img.set_colorkey((0, 0, 0))
-    bb_rect = bomb_img.get_rect()
-    bb_rect.center = random.randint(0,WIDTH), random.randint(0,HEIGHT)
+    bb_rct = bomb_img.get_rect()
+    bb_rct.center = random.randint(0,WIDTH), random.randint(0,HEIGHT)
     vx = +5
     vy = +5
 
@@ -57,12 +57,19 @@ def main():
                 sum_mv[0] += v[0]
                 sum_mv[1] += v[1]
         kk_rct.move_ip(sum_mv)
-        bb_rect.move_ip(vx, vy)
+        if check(kk_rct)!=(True,True):
+            kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
+        bb_rct.move_ip(vx, vy)
+        yoko,tate=check(bb_rct)
+        if not yoko:
+            vx *=-1
+        if not tate:
+            vy *=-1
         screen.blit(kk_img, kk_rct)
-        screen.blit(bomb_img, bb_rect)
+        screen.blit(bomb_img, bb_rct)
         pg.display.update()
         tmr += 1
-        clock.tick(50)
+        clock.tick(60)
 
 
 if __name__ == "__main__":
