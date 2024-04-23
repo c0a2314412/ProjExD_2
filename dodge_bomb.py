@@ -14,6 +14,19 @@ DELTA = {#こうかトン移動用辞書
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 
+def check(any_rct):
+    """
+    動く物体の画面外判定
+    横，縦
+    """
+    yoko, tate=True, True
+    if any_rct.left <= 0 or WIDTH <= any_rct.right:
+        yoko=False
+    if any_rct.up <= 0 or HEIGHT <= any_rct.dottom:
+        tate=False
+    return yoko,tate
+
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -35,8 +48,7 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        screen.blit(bg_img, [0, 0]) 
-        screen.blit(bomb_img, bb_rect)
+        screen.blit(bg_img, [0, 0])
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -47,6 +59,7 @@ def main():
         kk_rct.move_ip(sum_mv)
         bb_rect.move_ip(vx, vy)
         screen.blit(kk_img, kk_rct)
+        screen.blit(bomb_img, bb_rect)
         pg.display.update()
         tmr += 1
         clock.tick(50)
