@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 import random
 import pygame as pg
 
@@ -22,6 +23,15 @@ def bomb_accs():
         pg.draw.circle(bb_img[r-1], (255, 0, 0), (10*r,10*r), 10*r)
         bb_img[r-1].set_colorkey((0, 0, 0))
     return (bb_img,accs)
+
+
+def Game_Over():
+    owari=pg.Surface((20,20))
+    pg.draw.rect(owari, (0,0,0), [WIDTH,HEIGHT])
+    owari.set_alpha
+    fonto = pg.font.Font(None,80)
+    txt = fonto.render("Game Over",True,(255,255,255))
+    return owari,txt
 
 
 def check(any_rct:pg.Rect):
@@ -65,7 +75,15 @@ def main():
             if event.type == pg.QUIT: 
                 return
         if kk_rct.colliderect(bb_rct):
+            owari2,txt2=Game_Over()
+            screen.blit(txt2,[WIDTH/2,HEIGHT/2])
+            screen.blit(owari2,[WIDTH/2,HEIGHT/2])
+            clock = pg.time.Clock()
+            clock.tick(300)
+            """
             print("Game Over")
+            return
+            """
             return
         screen.blit(bg_img, [0, 0])
 
